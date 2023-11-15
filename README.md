@@ -204,6 +204,10 @@ Parece que debemos ejecutar el comando ```rails db:migrate RAILS_ENV=development
 ![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/actividad3.1.png)
 
 
+Ejecutamis ```rails server``` de nuevo y verificamos en nuestra maquina local.
+
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/actividad5.png)
+
 La mayoría de los proveedores de autenticación requieren que tu registre cualquier aplicación que utilizará su sitio para la autenticación, por lo que en este ejemplo necesitarás crear una cuenta de desarrollador de Twitter, que te asignará una clave API y un secreto API que especificarás en `config/initializers/ omniauth.rb` (codigo anterior, abajo).
 
 **Pregunta:** Debes tener cuidado para evitar crear una vulnerabilidad de seguridad. ¿Qué sucede si un atacante malintencionado crea un envío de formulario que intenta modificar `params[:moviegoer][:uid]` o `params[:moviegoer][:provider]` (campos que solo deben modificarse mediante la lógica de autenticación) publicando campos de formulario ocultos denominados `params[moviegoer][uid]` y así sucesivamente?.
@@ -255,6 +259,11 @@ c) Coloca una copia de la siguiente línea en cualquier lugar dentro de la clase
 ```
 has_many :reviews
 ```
+
+Ahora ejecutaremos el comando para actualizar la base de datos ```rails db:migrate RAILS_ENV=development```.
+
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/actividad6.png)
+
 
 #### Asociaciones indirectas
 

@@ -1,33 +1,18 @@
 # Rails-Avanzado
 ### Ruby en Rails avanzado
 
-Una vista parcial es el nombre de Rails para una parte reutilizable de una vista. Cuando debe aparecer contenido similar en diferentes vistas, colocar ese contenido en una 
-parte e “incluirlo” en archivos separados ayuda a DRY la repetición. 
+Antes de comenzar con la actividad primero ejecutaremos ```rails server``` para esto primero inicializamos las gemas con ```bundle install```. Vemos que al ejecutar por promiera vez en pantalla se ve lo siguiente.
 
-```
-<!--  ...other code from index.html.erb here... -->
-<div class="row bg-dark text-white">
-    <div class="col-6 text-center">Title and More Info</div>
-    <div class="col-2 text-center">Rating</div>
-    <div class="col-4 text-center">Release Date</div>
-</div>
-<%= render partial: 'movie', collection: @movies %>
-```
-```
-<div class="row">
-    <div class="col-8"> <%= link_to movie.title, movie_path(movie) %> </div>
-    <div class="col-2"> <%= movie.rating %> </div>
-    <div class="col-2"> <%= movie.release_date.strftime('%F') %> </div>
-</div>
-```
+![]()
 
-Aprovecha la convención sobre la configuración, y llama al archivo `_movie.html.erb`, ¿que pasa con haml que se estuvo utilizando? : Rails usa el nombre del archivo (sin el guión bajo) para establecer 
-una variable local (película) para cada elemento de la colección `@movies` por turno.
-Una vista parcial puede estar en un directorio diferente al de la vista que lo usa, en cuyo caso una ruta como 'layouts/footer' haría que Rails busque 
-app/views/layouts/_footer.html.erb.
+Esto quiere decir que la tabla ```Moviegoer``` aun no ha sido creada por lo que mientras tanto cambiaremos en el codigo de ```app/controllers/application_controller.rb``` y cambiamos la palabras Moviegoer por Movie, posteriormente ejecutaremos el comando ```rails db:migrate``` y ejecutaremos nuevamente el comando ```rails server```.
+
+![]()
+
+Ahora nos aparece la tabla de manera correcta
 
 Las validaciones de modelos, al igual que las migraciones, se expresan en un mini-DSL integrado en Ruby, como muestra en el siguiente código.  Escribe el código siguiente en el
-código dado.
+código dado en ```app/models/movie.rb```
 
 ```ruby
 class Movie < ActiveRecord::Base
@@ -48,7 +33,7 @@ class Movie < ActiveRecord::Base
 end
 ```
 
-y comprueba tus resultados en la consola:
+y comprueba tus resultados en la consola, para esro usaremos la consola de comandos de ruby, ejecutaremos el comando ```rails console```.
 
 ```
 m = Movie.new(:title => '', :rating => 'RG', :release_date => '1929-01-01')
@@ -59,10 +44,15 @@ m.errors[:rating] # => [] - validation skipped for grandfathered movies
 m.errors[:release_date] # => ["must be 1930 or later"]
 m.errors.full_messages # => ["Title can't be blank", "Release date must be 1930 or later"]
 ```
+ahora veremos el output en consola
+
+![]()
+
+Se han realizado las pruebas correspondientes para lo solicitado
 
 Explica el código siguiente :
 
-```
+```ruby 
 class MoviesController < ApplicationController
   def new
     @movie = Movie.new
@@ -101,9 +91,12 @@ class MoviesController < ApplicationController
   end
 end
 ```
+
+Este controlador maneja las operaciones CRUD (Crear, Leer, Actualizar, Eliminar) para las películas en la aplicación Rails, interactuando con la base de datos y gestionando las vistas asociadas.
+
 Comprueba que el código siguiente ilustra cómo utilizar este mecanismo para “canonicalizar” (estandarizar el formato de) ciertos campos del modelo antes de guardar el modelo. 
 
-```
+```ruby
 class Movie < ActiveRecord::Base
     before_save :capitalize_title
     def capitalize_title
@@ -112,28 +105,18 @@ class Movie < ActiveRecord::Base
     end
 end
 ```
-Comprueba en la consola :
+
+Comprueba en la consola : utilizaremos el comando ```rails console``` y escribimos lo siguiente
 
 ```
 m = Movie.create!(:title => 'STAR  wars', :release_date => '27-5-1977', :rating => 'PG')
 m.title  # => "Star Wars"
 ```
 
-Análogo a una validación es un filtro de controlador: un método que verifica si ciertas condiciones son verdaderas antes de ejecutar una acción o establece condiciones comunes en las que dependen muchas acciones. Si no se cumplen las condiciones, el filtro puede optar por "detener la presentación" mostrando una plantilla de vista o redirigiendo a otra acción. Si el filtro permite que la acción continúe, será responsabilidad de la acción dar una respuesta, como es habitual. 
+Veremos el output de lo que se percibe en consola.
 
-Por ejemplo, un uso extremadamente común de los filtros es imponer el requisito de que un usuario inicie sesión antes de poder realizar determinadas acciones. El código  muestra un filtro que exige que un usuario válido ha iniciado sesión. Comprueba el resultado del código.
+![]()
 
-```
-class ApplicationController < ActionController::Base
-    before_filter :set_current_user
-    protected # prevents method from being invoked by a route
-    def set_current_user
-        # we exploit the fact that the below query may return nil
-        @current_user ||= Moviegoer.where(:id => session[:user_id])
-        redirect_to login_path and return unless @current_user
-    end
-end
-```
 
 #### SSO y autenticación a través de terceros 
 
@@ -142,14 +125,17 @@ Un ejemplo muy actual de esto es la autenticación.
 
 Afortunadamente, añadir autenticación en las aplicaciones Rails a través de terceros es algo directo. Por supuesto, antes de que permitamos iniciar sesión a un usuario, ¡necesitamos poder representar usuarios! Así que antes de continuar, vamos a crear un modelo y una migración básicos siguiendo las instrucciones del código  siguiente:
 
+
 a) Escribe este comando en una terminal para crear un modelo moviegoers y una migración, y ejecuta rake db:migrate para aplicar la migración. 
 
 ```
 rails generate model Moviegoer name:string provider:string uid:string
 ```
+Si se presenta algun problema se debe agregar lo siguiente ```--force``` para resolver el problema.
+
 b) Luego edita el archivo `app/models/moviegoer.rb` generado para que coincida con este código. 
 
-```
+```ruby
 # Edit app/models/moviegoer.rb to look like this:
 class Moviegoer < ActiveRecord::Base
     def self.create_with_omniauth(auth)
@@ -163,6 +149,23 @@ end
 Se puede autenticar al usuario a través de un tercero. Usar la excelente gema OmniAuth que proporciona una API uniforme para muchos proveedores de SSO diferentes. 
 El código siguiente muestra los cambios necesarios en sus rutas, controladores y vistas para usar OmniAuth.  
 
+Antes de iniciar debemos especificar el archivo GEMFILE y cambiarlo y agregarle estas dos gemas
+```
+gem 'omniauth'
+gem 'omniauth-twitter'
+```
+Luego escribir ```bundle install``` para instalar las gemas.
+
+Creamos un archivo ```config/initializers/omniauth.rb``` con la siguiente configuración. Reemplaza "API_KEY" y "API_SECRET" con las claves que obtuviste al registrar tu aplicación en Twitter.
+
+```ruby
+Rails.application.config.middleware.use OmniAuth::Builder do
+  provider :twitter, "API_KEY", "API_SECRET"
+end
+```
+
+En el archivo ```config/routes.rb```, agrega las rutas necesarias para manejar la autenticación:
+
 ```
 #routes.rb
 get  'auth/:provider/callback' => 'sessions#create'
@@ -170,6 +173,8 @@ get  'auth/failure' => 'sessions#failure'
 get  'auth/twitter', :as => 'login'
 post 'logout' => 'sessions#destroy'
 ```
+
+Por ultimo creamos un controlador de sesiones (sessions_controller.rb) con las acciones necesarias para manejar la autenticación:
 
 ```
 class SessionsController < ApplicationController
@@ -190,16 +195,20 @@ class SessionsController < ApplicationController
   end
 end
 ```
-```
-# Replace API_KEY and API_SECRET with the values you got from Twitter
-Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :twitter, "API_KEY", "API_SECRET"
-end
-```
+Ejecutamos ```rails server``` y veamos
+
+![]()
+
+Parece que debemos ejecutar el comando ```rails db:migrate RAILS_ENV=development``` para actualizar el conjunto. A continuacion vemos que todo se realiza con normalidad.
+
+![]()
+
 
 La mayoría de los proveedores de autenticación requieren que tu registre cualquier aplicación que utilizará su sitio para la autenticación, por lo que en este ejemplo necesitarás crear una cuenta de desarrollador de Twitter, que te asignará una clave API y un secreto API que especificarás en `config/initializers/ omniauth.rb` (codigo anterior, abajo).
 
 **Pregunta:** Debes tener cuidado para evitar crear una vulnerabilidad de seguridad. ¿Qué sucede si un atacante malintencionado crea un envío de formulario que intenta modificar `params[:moviegoer][:uid]` o `params[:moviegoer][:provider]` (campos que solo deben modificarse mediante la lógica de autenticación) publicando campos de formulario ocultos denominados `params[moviegoer][uid]` y así sucesivamente?.
+
+**Respuesta** Si un atacante malintencionado intenta manipular los campos params[:moviegoer][:uid] o params[:moviegoer][:provider] incluyendo campos ocultos en un formulario, podrían intentar realizar cambios no autorizados en la información crítica del usuario, como su identificador (uid) o proveedor (provider). Esto podría llevar a una suplantación de identidad o a la modificación indebida de información del usuario.
 
 #### Asociaciones y claves foráneas 
 
@@ -213,30 +222,13 @@ SELECT reviews.*
     FROM movies JOIN reviews ON movies.id=reviews.movie_id
     WHERE movies.id = 41;
 ```
-
-Comprueba la implementación sencilla de asociaciones de hacer referencia directamente a objetos asociados, aunque estén almacenados en diferentes tablas de bases de datos. ¿Por que se puede hacer esto?
-
-```
-# it would be nice if we could do this:
-inception = Movie.where(:title => 'Inception')
-alice,bob = Moviegoer.find(alice_id, bob_id)
-# alice likes Inception, bob less so
-alice_review = Review.new(:potatoes => 5)
-bob_review   = Review.new(:potatoes => 3)
-# a movie has many reviews:
-inception.reviews = [alice_review, bob_review]
-# a moviegoer has many reviews:
-alice.reviews << alice_review
-bob.reviews << bob_review
-# can we find out who wrote each review?
-inception.reviews.map { |r| r.moviegoer.name } # => ['alice','bob']
-```
+**Respuesta** realizan una consulta que selecciona todas las columnas de la tabla reviews donde el id de la película (movie_id en la tabla reviews) es igual a 41. 
 
 Aplica los cambios del código siguiente y arranca `rails console` y ejecutar correctamente los ejemplos del código. 
 
 (a): Crea y aplica esta migración para crear la tabla Reviews. Las claves foraneas del nuevo modelo están relacionadas con las tablas movies y moviegoers existentes por convención sobre la configuración. 
 
-```
+```ruby
 # Run 'rails generate migration create_reviews' and then
 #   edit db/migrate/*_create_reviews.rb to look like this:
 class CreateReviews < ActiveRecord::Migration
@@ -251,7 +243,7 @@ class CreateReviews < ActiveRecord::Migration
 end
 ```
 b) Coloca este nuevo modelo de revisión en `app/models/review.rb`. 
-```
+```ruby
 class Review < ActiveRecord::Base
     belongs_to :movie
     belongs_to :moviegoer
@@ -265,6 +257,7 @@ has_many :reviews
 ```
 
 #### Asociaciones indirectas
+
 Volviendo a la figura siguiente, vemos asociaciones directas entre Moviegoers y Reviews, así como entre Movies y Reviews.
 
 <img src="https://e.saasbook.info/assets/Chapter5/5.9-1ff7ee5268d1af8d2bc0cd61ac7a0f113c248deb1188de757f86b0e192d9c2b2.jpg" alt="drawing" width="500"/>
@@ -294,38 +287,9 @@ SELECT movies .*
     JOIN moviegoers ON moviegoers.id = reviews.moviegoer_id
     WHERE moviegoers.id = 1;
 ```
-Se ha  añadido `has_many :reviews` a la clase `Movie`.  El método `has_many` utiliza la metaprogramación para definir el nuevo método de `instancia reviews=` que usamos en el código siguiente.     
 
-```
-# it would be nice if we could do this:
-inception = Movie.where(:title => 'Inception')
-alice,bob = Moviegoer.find(alice_id, bob_id)
-# alice likes Inception, bob less so
-alice_review = Review.new(:potatoes => 5)
-bob_review   = Review.new(:potatoes => 3)
-# a movie has many reviews:
-inception.reviews = [alice_review, bob_review]
-# a moviegoer has many reviews:
-alice.reviews << alice_review
-bob.reviews << bob_review
-# can we find out who wrote each review?
-inception.reviews.map { |r| r.moviegoer.name } # => ['alice','bob']
-```
+**Respuesta** realiza una consulta que selecciona todas las columnas de la tabla movies donde hay una relación entre las tablas movies, reviews, y moviegoers, y donde el id del moviegoer es igual a 1. 
 
-Las asociaciones representan uno de los aspectos de Rails con una funcionalidad completa así que eche una ojeada a su documentación completa. En concreto: 
 
-* Al igual que el ciclo de vida de los hooks de ActiveRecord, las asociaciones ofrecen formas de intervención que se pueden lanzar cuando se añaden o se borran objetos de una asociación (como cuando se añaden nuevas Reviews a una Movie), y que son distintos del ciclo de vida de los hooks de  `Movies` o `Reviews` por separado.
-* Las validaciones se pueden declarar en modelos asociados, como se muestra en el código.
-
-```
-class Review < ActiveRecord::Base
-    # review is valid only if it's associated with a movie:
-    validates :movie_id , :presence => true
-    # can ALSO require that the referenced movie itself be valid
-    # in order for the review to be valid:
-    validates_associated :movie
-end
-```
-* Como llamar a `save` o `save!` sobre un objeto que usa asociaciones también afecta a los objetos a los que esté asociado, se aplican algunas salvedades si alguno de estos métodos falla. Por ejemplo, si acabas de crear una nueva `Movie` y dos nuevas `Review que asociar a esa `Movie`, e intenta guardar dicha película, cualquiera de los tres métodos save que se apliquen fallarán si los objetos no son válidos (entre otras razones).  !Comprueba esto!.
 
 * Existen opciones adicionales en los métodos de asociaciones que controlan lo que pasa a los objetos que son “tenidos” cuando el objeto “poseedor” se destruye. Por ejemplo, `has_many :reviews,:dependent=>:destroy` especifica que las críticas que pertenezcan a una determina película se deben borrar de la base de datos si se borra esa película.

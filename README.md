@@ -1,12 +1,6 @@
 # Rails-Avanzado
 ### Ruby en Rails avanzado
 
-En esta actividad individual, construiras un repositorio llamado Rails-Avanzado y presentarás en clase tus resultados. Utiliza https://github.com/kapumota/Desarrollo-software-2023/tree/main/Semana7/myrottenpotatoes.
-
-El código dado tiene algunos errores en la lógica del proceso del uso de frameworks y presente casi todos los tópicos avanzados en clase.
-
-#### Vistas parciales, validaciones y filtros
-
 Una vista parcial es el nombre de Rails para una parte reutilizable de una vista. Cuando debe aparecer contenido similar en diferentes vistas, colocar ese contenido en una 
 parte e “incluirlo” en archivos separados ayuda a DRY la repetición. 
 
@@ -35,7 +29,7 @@ app/views/layouts/_footer.html.erb.
 Las validaciones de modelos, al igual que las migraciones, se expresan en un mini-DSL integrado en Ruby, como muestra en el siguiente código.  Escribe el código siguiente en el
 código dado.
 
-```
+```ruby
 class Movie < ActiveRecord::Base
     def self.all_ratings ; %w[G PG PG-13 R NC-17] ; end #  shortcut: array of strings
     validates :title, :presence => true

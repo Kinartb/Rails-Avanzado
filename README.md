@@ -197,11 +197,11 @@ end
 ```
 Ejecutamos ```rails server``` y veamos
 
-![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/actividad3.1.png)
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/actividad4.png)
 
 Parece que debemos ejecutar el comando ```rails db:migrate RAILS_ENV=development``` para actualizar el conjunto. A continuacion vemos que todo se realiza con normalidad.
 
-![]()
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/actividad3.1.png)
 
 
 La mayoría de los proveedores de autenticación requieren que tu registre cualquier aplicación que utilizará su sitio para la autenticación, por lo que en este ejemplo necesitarás crear una cuenta de desarrollador de Twitter, que te asignará una clave API y un secreto API que especificarás en `config/initializers/ omniauth.rb` (codigo anterior, abajo).

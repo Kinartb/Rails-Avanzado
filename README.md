@@ -273,7 +273,7 @@ Volviendo a la figura siguiente, vemos asociaciones directas entre Moviegoers y 
 
 Comprueba que el código muestra cómo se usa la opción `:through` en `has_many` para representar una asociación indirecta. De la misma manera, puede añadir `has_many:moviegoers,:through=>:reviews` al modelo `Movie` y escribir `movie.moviegoers` para preguntar qué usuarios están asociados con (escribieron críticas de) una película dada. 
 
-```
+```ruby
 # Run 'rails generate migration create_reviews' and then
 #   edit db/migrate/*_create_reviews.rb to look like this:
 class CreateReviews < ActiveRecord::Migration

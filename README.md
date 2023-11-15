@@ -3,11 +3,11 @@
 
 Antes de comenzar con la actividad primero ejecutaremos ```rails server``` para esto primero inicializamos las gemas con ```bundle install```. Vemos que al ejecutar por promiera vez en pantalla se ve lo siguiente.
 
-![]()
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/actividad0.png)
 
 Esto quiere decir que la tabla ```Moviegoer``` aun no ha sido creada por lo que mientras tanto cambiaremos en el codigo de ```app/controllers/application_controller.rb``` y cambiamos la palabras Moviegoer por Movie, posteriormente ejecutaremos el comando ```rails db:migrate``` y ejecutaremos nuevamente el comando ```rails server```.
 
-![]()
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/actividad1.png)
 
 Ahora nos aparece la tabla de manera correcta
 
@@ -46,7 +46,7 @@ m.errors.full_messages # => ["Title can't be blank", "Release date must be 1930 
 ```
 ahora veremos el output en consola
 
-![]()
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/actividad2.png)
 
 Se han realizado las pruebas correspondientes para lo solicitado
 
@@ -115,7 +115,7 @@ m.title  # => "Star Wars"
 
 Veremos el output de lo que se percibe en consola.
 
-![]()
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/actividad3.png)
 
 
 #### SSO y autenticación a través de terceros 
@@ -197,7 +197,7 @@ end
 ```
 Ejecutamos ```rails server``` y veamos
 
-![]()
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/actividad3.1.png)
 
 Parece que debemos ejecutar el comando ```rails db:migrate RAILS_ENV=development``` para actualizar el conjunto. A continuacion vemos que todo se realiza con normalidad.
 

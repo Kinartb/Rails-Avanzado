@@ -228,12 +228,6 @@ SELECT reviews.*
 ```
 **Respuesta** realizan una consulta que selecciona todas las columnas de la tabla reviews donde el id de la película (movie_id en la tabla reviews) es igual a 41.
 
-TERMINANDO ASOCIACIONES
-
-![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/asociaciones.png)
-
-
-![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/asociaciones2.png)
 
 Aplica los cambios del código siguiente y arranca `rails console` y ejecutar correctamente los ejemplos del código. 
 
@@ -309,3 +303,11 @@ SELECT movies .*
 
 
 * Existen opciones adicionales en los métodos de asociaciones que controlan lo que pasa a los objetos que son “tenidos” cuando el objeto “poseedor” se destruye. Por ejemplo, `has_many :reviews,:dependent=>:destroy` especifica que las críticas que pertenezcan a una determina película se deben borrar de la base de datos si se borra esa película.
+
+
+## TERMINANDO ASOCIACIONES
+
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/asociacion.png)
+
+
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/asociacion2.png)

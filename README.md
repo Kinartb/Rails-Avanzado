@@ -226,7 +226,14 @@ SELECT reviews.*
     FROM movies JOIN reviews ON movies.id=reviews.movie_id
     WHERE movies.id = 41;
 ```
-**Respuesta** realizan una consulta que selecciona todas las columnas de la tabla reviews donde el id de la película (movie_id en la tabla reviews) es igual a 41. 
+**Respuesta** realizan una consulta que selecciona todas las columnas de la tabla reviews donde el id de la película (movie_id en la tabla reviews) es igual a 41.
+
+TERMINANDO ASOCIACIONES
+
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/asociaciones.png)
+
+
+![](https://github.com/Kinartb/Rails-Avanzado/blob/main/imagenes/asociaciones2.png)
 
 Aplica los cambios del código siguiente y arranca `rails console` y ejecutar correctamente los ejemplos del código. 
 
